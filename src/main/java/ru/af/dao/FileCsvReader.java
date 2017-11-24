@@ -1,4 +1,4 @@
-package dao;
+package ru.af.dao;
 
 import com.csvreader.CsvReader;
 import ru.af.entity.InputLine;
@@ -7,10 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FileCSVReader {
-    String path= PropertyHolder.getInstance().INPUT_FOLDER+"example.csv";
+public class FileCsvReader {
 
-    public ArrayList<InputLine> read() {
+    public ArrayList<InputLine> read(String path) {
         ArrayList<InputLine> listOfSessions = new ArrayList<>();
         CsvReader sessions=null;
         try {

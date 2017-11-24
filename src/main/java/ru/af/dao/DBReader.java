@@ -1,4 +1,4 @@
-package dao;
+package ru.af.dao;
 
 public class DBReader {
 

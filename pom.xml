@@ -26,6 +26,31 @@
             <artifactId>javacsv</artifactId>
             <version>2.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.n3twork.druid</groupId>
+            <artifactId>alphanum</artifactId>
+            <version>1.0.3</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>logstatistics</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.af.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

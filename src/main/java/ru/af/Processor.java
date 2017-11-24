@@ -1,7 +1,11 @@
-package ru.af.entity;
+package ru.af;
 
-import java.text.DateFormat;
-import java.text.Format;
+import com.davekoelle.alphanum.AlphanumComparator;
+import ru.af.entity.InputLine;
+import ru.af.entity.OutLine;
+import ru.af.entity.Session;
+import ru.af.entity.UserURLKey;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,6 +31,7 @@ public class Processor {
 
     /**
      * конрветирует дату в timestamp
+     *
      * @param date дата
      * @return timestamp
      */
@@ -46,12 +51,14 @@ public class Processor {
 
     /**
      * обрезать до начала текущего дня (до получночи)
+     *
      * @param unixTime время timestamp [c]
      * @return начало текущего дня
      */
-    private long trancateToMidnight(long unixTime){
-        return unixTime-unixTime%SECONDS_PER_DAY;
+    private long trancateToMidnight(long unixTime) {
+        return unixTime - unixTime % SECONDS_PER_DAY;
     }
+
     /**
      * разделяет на отдельные сеансы по дням
      *
@@ -95,50 +102,73 @@ public class Processor {
         return separatedSessions;
     }
 
-    /**
-     * Определяет и сортирует даты в списке
-     * @param listOfSessions список сеансов
-     * @return сет дат в хронологическом порядке
-     */
-
-    public Set<Long> determDates(List<Session> listOfSessions) {
-        Set<Long> dates = new TreeSet<>();
-
-        for (Session session : listOfSessions) {
-
-            dates.add(session.getDate());
-        }
-        return dates;
-    }
 
     /**
-     * считает среднее по посещениям и сортирует юзеров по имени
-     * @param separatedSessions
-     * @return
+     * группирует сеансы по дате
+     *
+     * @param separatedSessions список всех сеансов
+     * @return ключ-дата в формате timestamp, значение-список сансов даты
      */
     public SortedMap<Long, List<Session>> groupByDate(List<Session> separatedSessions) {
-        SortedMap<Long,List<Session>> groupedByDate = new TreeMap<>();
+        SortedMap<Long, List<Session>> groupedByDate = new TreeMap<>();
+
         for (Session separatedSession : separatedSessions) {
-            if(!groupedByDate.containsKey(separatedSession.getDate())){
-                groupedByDate.put(separatedSession.getDate(),new ArrayList<Session>());
+            if (!groupedByDate.containsKey(separatedSession.getDate())) {
+                groupedByDate.put(separatedSession.getDate(), new ArrayList<Session>());
             }
             groupedByDate.get(separatedSession.getDate()).add(separatedSession);
         }
         return groupedByDate;
     }
-    public Map<Long,List<Session>> groupedByUserAndURL(Map<Long,List<Session>> groupedByDayMap){
-        SortedMap<UserURLKey,List<Integer>> groupedByUserAndURL = new TreeMap<>();
+
+    /**
+     * формирует мапу для записи
+     * @param groupedByDayMap сгруппированый по дате список
+     * @return сключ-дата в формате timestamp, значение список подготовленых к записе строк
+     */
+    public Map<Long, List<OutLine>> formStatistics(Map<Long, List<Session>> groupedByDayMap) {
+        SortedMap<Long,List<OutLine>> result = new TreeMap<>();
 
         for (Long date : groupedByDayMap.keySet()) {
+
             List<Session> sessionList = groupedByDayMap.get(date);
+            result.put(date,groupedByUserAndURL(sessionList));
+        }
+        return result;
+    }
 
-            for (Session session : sessionList) {
+    /**
+     * группирует и  вычесляет среднее значение сенаса в рамках одного дня
+     * @param sessionList несгруппированый список
+     * @return подготовленный список объектов для записи
+     */
+    private List<OutLine> groupedByUserAndURL(List<Session> sessionList) {
+        List<OutLine> result = new ArrayList<>();
+        Map<UserURLKey, List<Integer>> groupedByUserAndURL = new HashMap<>();
 
+        for (Session session : sessionList) {
+            UserURLKey key = new UserURLKey(session.getUserId(), session.getUrl());
+
+            if (!groupedByUserAndURL.containsKey(key)) {
+                groupedByUserAndURL.put(key, new ArrayList<>());
             }
 
+            groupedByUserAndURL.get(key).add(session.getDuration());
         }
 
-        return null;
+        for (UserURLKey userURLKey : groupedByUserAndURL.keySet()) {
+            List<Integer> listOfDuration = groupedByUserAndURL.get(userURLKey);
+            Integer sum = 0;
+            for (Integer duration : listOfDuration) {
+                sum = sum + duration;
+            }
+            Integer avarage = sum / listOfDuration.size();
+            OutLine out = new OutLine(userURLKey.getUserId(), userURLKey.getUrl(), avarage);
+            result.add(out);
+        }
+
+        Collections.sort(result);
+        return result;
     }
 
 }
