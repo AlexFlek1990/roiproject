@@ -8,6 +8,7 @@ import ru.af.Processor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class FileCsvWriter {
@@ -24,12 +25,13 @@ public class FileCsvWriter {
         Processor p = new Processor();
         try {
             String outputFile = "avg_" + fileName;
-            csvWriter = new CsvWriter(new FileWriter(path + File.separator + outputFile), ',');
+            csvWriter = new CsvWriter(path + File.separator + outputFile,
+                    ',', Charset.forName("utf-8"));
             for (String HEADER : HEADERS) {
                 csvWriter.write(HEADER);
-
             }
             csvWriter.endRecord();
+
             for (Long date : block.keySet()) {
                 csvWriter.write(p.convertUnixToDate(date));
                 csvWriter.endRecord();
@@ -42,7 +44,7 @@ public class FileCsvWriter {
                 }
                 csvWriter.endRecord();
             }
-            csvWriter.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
