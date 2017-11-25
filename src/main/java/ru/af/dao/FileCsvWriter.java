@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileCsvWriter {
-    private static final String[] HEADERS = {"time", "ID user", "URL", "avgTime"};
+    private static final String[] HEADERS = {"ID user", "URL", "avgTime"};
     private String path = PropertyHolder.getInstance().OUTPUT_FOLDER;
 
     /**
