@@ -2,15 +2,17 @@ package ru.af.entity;
 
 import com.davekoelle.alphanum.AlphanumComparator;
 
+/**
+ * Выводимая строка
+ */
+
 public class OutLine implements Comparable<OutLine> {
 
     private static AlphanumComparator comparator = new AlphanumComparator();
 
     private String userId;
     private String url;
-    /**
-     * Среднее время
-     */
+     // среднее время сеанса
     private int avgDuration;
 
     public OutLine(String userId, String url, int avgDuration) {
@@ -23,24 +25,12 @@ public class OutLine implements Comparable<OutLine> {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public int getAvgDuration() {
         return avgDuration;
-    }
-
-    public void setAvgDuration(int avgDuration) {
-        this.avgDuration = avgDuration;
     }
 
     @Override

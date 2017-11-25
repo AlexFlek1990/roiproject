@@ -27,9 +27,11 @@ public class Main {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        doWork(fileNames);
+        System.out.println(" WELCOME ");
+        System.out.println();
 
         //обработать файлы
+        doWork(fileNames);
 
         //следить за новыми файлами
         watchFroNewFiles(inputPath);
@@ -46,7 +48,7 @@ public class Main {
             folder.register(watcher, ENTRY_CREATE);
 
             while (true) {
-                System.out.println("do");
+
                 // wait for key to be signaled
                 WatchKey key;
                 try {
@@ -72,7 +74,6 @@ public class Main {
                     break;
                 }
                 Thread.sleep(2000);
-
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -84,14 +85,14 @@ public class Main {
     private static void doWork(List<Path> fileNames) {
         for (Path fileName : fileNames) {
             if (fileName != null && fileName.toString().contains(".csv")) {
-                executorService.submit(new FIleTask(fileName));
+                executorService.submit(new FileTask(fileName));
             }
         }
     }
 
     private static void doWork(Path path) {
         if (path != null && path.toString().contains(".csv")) {
-            executorService.submit(new FIleTask(path));
+            executorService.submit(new FileTask(path));
         }
     }
 }

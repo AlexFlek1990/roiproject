@@ -3,9 +3,11 @@ package ru.af;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Хранилище инфрмации о входной.выходной дирректории
+ */
 public class PropertyHolder {
 
     public final String INPUT_FOLDER;
@@ -19,22 +21,23 @@ public class PropertyHolder {
     }
 
     /**
-     * получить данные из application.properties
+     * загружает данные из application.properties, который находится вне jar файла
+     *
+     * https://stackoverflow.com/questions/8775303/read-properties-file-outside-jar-file
      *
      * @return prop
      */
-    public static Properties loadProperties() {
-/**
- * https://stackoverflow.com/questions/8775303/read-properties-file-outside-jar-file
- */
+    private static Properties loadProperties() {
+
         Properties prop = new Properties();
         try {
-            File jarPath = new File(PropertyHolder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            File jarPath = new File(
+                    PropertyHolder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             String propertiesPath = jarPath.getParentFile().getAbsolutePath();
-            System.out.println(" propertiesPath-" + propertiesPath);
+//            System.out.println(" propertiesPath-" + propertiesPath);
             prop.load(new FileInputStream(propertiesPath + "/application.properties"));
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return prop;
     }

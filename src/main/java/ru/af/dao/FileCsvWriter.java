@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileCsvWriter {
-    private static String[] HEADERS = {"time", "ID user", "URL", "avgTime"};
-    String path = PropertyHolder.getInstance().OUTPUT_FOLDER;
+    private static final String[] HEADERS = {"time", "ID user", "URL", "avgTime"};
+    private String path = PropertyHolder.getInstance().OUTPUT_FOLDER;
 
     /**
+     * записывает в
+     *
      * @param block - ключ - дата, значение - стороки
      */
     public void write(Map<Long, List<OutLine>> block, String fileName) {
@@ -23,8 +25,8 @@ public class FileCsvWriter {
         try {
             String outputFile = "avg_" + fileName;
             csvWriter = new CsvWriter(new FileWriter(path + File.separator + outputFile), ',');
-            for (int i = 0; i < HEADERS.length; i++) {
-                csvWriter.write(HEADERS[i]);
+            for (String HEADER : HEADERS) {
+                csvWriter.write(HEADER);
 
             }
             csvWriter.endRecord();
@@ -44,7 +46,9 @@ public class FileCsvWriter {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            csvWriter.close();
+            if (csvWriter != null) {
+                csvWriter.close();
+            }
         }
     }
 }

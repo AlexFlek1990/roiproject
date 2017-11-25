@@ -5,21 +5,25 @@ import ru.af.dao.FileCsvWriter;
 import ru.af.entity.OutLine;
 import ru.af.entity.Session;
 
-import java.io.File;
-import java.io.Writer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public class FIleTask implements Runnable {
+/**
+ * Поток чтения и записи
+ */
+public class FileTask implements Runnable {
     private Path path;
 
-    public FIleTask(Path path) {
+    public FileTask(Path path) {
         this.path = path;
     }
 
+
     @Override
     public void run() {
+
+        System.out.println("Обработка файла " + path.toAbsolutePath().toString());
         FileCsvReader reader = new FileCsvReader();
         Processor p = new Processor();
         List<Session> los= p.separateSessions(reader.read(path.toAbsolutePath().toString()));
@@ -29,5 +33,6 @@ public class FIleTask implements Runnable {
         FileCsvWriter w = new FileCsvWriter();
         String outFileName = path.getFileName().toString();
         w.write(result,outFileName);
+        System.out.println("Файл обработан");
     }
 }

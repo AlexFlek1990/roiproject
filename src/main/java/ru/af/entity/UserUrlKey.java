@@ -1,10 +1,14 @@
 package ru.af.entity;
 
-public class UserURLKey {
+
+/**
+ * Комплексный ключ
+ */
+public class UserUrlKey {
     private  String userId;
     private String url;
 
-    public UserURLKey(String userId, String url) {
+    public UserUrlKey(String userId, String url) {
         this.userId = userId;
         this.url = url;
     }
@@ -13,16 +17,8 @@ public class UserURLKey {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     @Override
@@ -30,10 +26,10 @@ public class UserURLKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserURLKey that = (UserURLKey) o;
+        UserUrlKey that = (UserUrlKey) o;
 
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        return url != null ? url.equals(that.url) : that.url == null;
+        return (userId != null ? userId.equals(that.userId) : that.userId == null) &&
+                (url != null ? url.equals(that.url) : that.url == null);
     }
 
     @Override

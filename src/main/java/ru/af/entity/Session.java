@@ -1,9 +1,16 @@
 package ru.af.entity;
 
+/**
+ * Сеанс
+ */
+
 public class Session {
+
     private String userId;
+    //дата сеанса в формате timestamp
     private Long date;
     private String url;
+    //длительность сеанса
     private int duration;
 
     public String getUserId() {

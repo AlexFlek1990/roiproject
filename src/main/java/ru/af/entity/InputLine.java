@@ -1,13 +1,15 @@
 package ru.af.entity;
 
 /**
- *
+ *Входная строка
  */
 
 public class InputLine {
     private String userId;
+    //длительность сеаанса
     private int duration;
     private String url;
+    //время наала сенаса в формате timestamp
     private long time;
 
     public String getUserId() {

@@ -9,9 +9,15 @@ import java.util.ArrayList;
 
 public class FileCsvReader {
 
+    /**
+     * чтение исходного csv файла
+     *
+     * @param path абсолютный путь файла
+     * @return список сеансов
+     */
     public ArrayList<InputLine> read(String path) {
         ArrayList<InputLine> listOfSessions = new ArrayList<>();
-        CsvReader sessions=null;
+        CsvReader sessions = null;
         try {
             sessions = new CsvReader(path);
             sessions.readHeaders();
@@ -30,7 +36,9 @@ public class FileCsvReader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            sessions.close();
+            if (sessions != null) {
+                sessions.close();
+            }
         }
         return listOfSessions;
     }
